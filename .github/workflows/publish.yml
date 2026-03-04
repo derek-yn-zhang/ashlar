@@ -11,7 +11,9 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
-    environment: pypi
+    environment:
+      name: pypi
+      url: https://pypi.org/p/kerf
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

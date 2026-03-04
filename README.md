@@ -16,7 +16,7 @@ Kerf runs deterministic tools first, calls the LLM only when you need reasoning,
 ## Install
 
 ```bash
-uv tool install git+https://github.com/derek-yn-zhang/kerf.git
+uv tool install kerf
 ```
 
 Requires Python 3.10+ and Claude CLI (`claude login`).
