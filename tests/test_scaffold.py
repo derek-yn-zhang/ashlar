@@ -21,12 +21,11 @@ class TestScaffoldProject:
     def test_creates_example_workflows(self):
         with tempfile.TemporaryDirectory() as d:
             scaffold_project(d)
-            for name in ["summarize", "classify", "extract"]:
+            for name in ["summarize", "classify", "extract", "clean"]:
                 wf_path = os.path.join(d, "workflows", f"{name}.json")
                 assert os.path.exists(wf_path)
                 with open(wf_path) as f:
-                    wf = json.load(f)
-                assert "task_type" in wf
+                    json.load(f)  # valid JSON
 
     def test_no_tool_file_scaffolded(self):
         """Builtins provide normalize_text; no need to scaffold a tool file."""

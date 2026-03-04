@@ -31,12 +31,43 @@ def init():
 @click.argument("workflow")
 @click.argument("input_data", required=False)
 @click.option("--debug", is_flag=True, help="Show debug output")
-def run(workflow, input_data, debug):
+@click.option("--batch", is_flag=True, help="Process JSONL input from stdin")
+def run(workflow, input_data, debug, batch):
     """Execute a workflow. Input can be an argument or piped via stdin."""
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.WARNING,
         format="%(asctime)s %(name)s %(levelname)s %(message)s",
     )
+
+    from kerf.engine import execute_workflow
+
+    project_dir = find_project_root()
+
+    if batch:
+        if sys.stdin.isatty():
+            click.echo("Error: --batch requires piped JSONL input.", err=True)
+            sys.exit(1)
+        for line_num, line in enumerate(sys.stdin, 1):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                record = json.loads(line)
+                line_input = record.get("input", "")
+                if not line_input:
+                    click.echo(json.dumps({"error": "missing 'input' field", "line": line_num}))
+                    continue
+                result = execute_workflow(
+                    workflow_name=workflow,
+                    input_data=line_input,
+                    project_dir=project_dir,
+                )
+                click.echo(json.dumps(result))
+            except json.JSONDecodeError:
+                click.echo(json.dumps({"error": "invalid JSON", "line": line_num}))
+            except Exception as e:
+                click.echo(json.dumps({"error": str(e), "line": line_num}))
+        return
 
     if input_data is None:
         if not sys.stdin.isatty():
@@ -45,9 +76,6 @@ def run(workflow, input_data, debug):
             click.echo("Error: provide input as an argument or pipe via stdin.", err=True)
             sys.exit(1)
 
-    from kerf.engine import execute_workflow
-
-    project_dir = find_project_root()
     try:
         result = execute_workflow(
             workflow_name=workflow,

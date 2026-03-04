@@ -15,7 +15,7 @@ Creates `.kerf`, `workflows/`, `schemas/`, `tools/`, `logs/`, and `kerf.toml`. F
 Execute a workflow.
 
 ```bash
-kerf run <workflow> [input] [--debug]
+kerf run <workflow> [input] [--debug] [--batch]
 ```
 
 | Argument / Option | Description |
@@ -23,20 +23,30 @@ kerf run <workflow> [input] [--debug]
 | `workflow` | Workflow name (matches `workflows/<name>.json`) |
 | `input` | Input text (optional — reads stdin if omitted) |
 | `--debug` | Show debug output: tool chain execution, prompts, LLM responses |
+| `--batch` | Process JSONL input from stdin (one JSON object per line) |
 
 ```bash
 # argument
 kerf run summarize "some text"
+```
 
+```bash
 # stdin
 cat file.txt | kerf run summarize
-echo "some text" | kerf run summarize
+```
 
-# debug mode — see what's happening under the hood
+```bash
+# debug mode
 kerf run --debug summarize "some text"
 ```
 
-Prints JSON result to stdout. With `--debug`, also prints the full execution trace to stderr.
+```bash
+# batch mode — one JSON result per line
+echo '{"input": "text one"}
+{"input": "text two"}' | kerf run summarize --batch
+```
+
+Prints JSON result to stdout. With `--debug`, also prints the full execution trace to stderr. With `--batch`, each input line produces one output line (JSONL).
 
 Set `KERF_DEBUG=1` to always show tracebacks on errors.
 

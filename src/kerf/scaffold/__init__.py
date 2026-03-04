@@ -26,6 +26,7 @@ def scaffold_project(target_dir: str):
         ("example_workflow.json", "summarize.json"),
         ("example_classify.json", "classify.json"),
         ("example_extract.json", "extract.json"),
+        ("example_clean.json", "clean.json"),
     ]:
         wf_content = _read_template(src)
         with open(os.path.join(target_dir, "workflows", dst), "w") as f:

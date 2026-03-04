@@ -1,0 +1,8 @@
+{
+  "tool_chain": [
+    { "tool": "strip_html", "condition": "has_html" },
+    { "tool": "normalize_text" },
+    { "tool": "truncate", "params": { "max_length": 2000 } }
+  ],
+  "fallback": "retry"
+}
