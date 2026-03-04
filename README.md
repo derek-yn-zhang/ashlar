@@ -11,13 +11,13 @@
 
 ---
 
-Kerf runs deterministic tools first, calls the LLM only when you need reasoning, and logs every result. Pipelines are defined as JSON — no Python required to configure a workflow.
+Kerf runs deterministic tools first, calls the LLM only when you need reasoning, and logs every result. Workflows are configured as JSON, custom tools are Python.
 
-- **Deterministic-first** — preprocessing runs without the LLM until you actually need it
-- **JSON workflows** — define tool chains, prompt templates, and fallback policies as config
-- **Per-workflow fallback** — `retry` the LLM, degrade to `deterministic` output, or `flag` for review
-- **Full execution logging** — every run gets a UUID-stamped log you can audit and learn from
-- **Auto-discovered tools** — drop a Python file in `tools/`, it gets picked up
+- **Deterministic-first:** preprocessing runs without the LLM until you actually need it
+- **JSON workflows:** define tool chains, prompt templates, and fallback policies as config
+- **Per-workflow fallback:** `retry` the LLM, degrade to `deterministic` output, or `flag` for review
+- **Full execution logging:** every run gets a UUID-stamped log you can audit and learn from
+- **Auto-discovered tools:** drop a Python file in `tools/`, it gets picked up
 
 ## Install
 
